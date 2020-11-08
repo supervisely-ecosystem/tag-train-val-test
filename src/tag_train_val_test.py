@@ -41,17 +41,17 @@ def main():
         "totalImagesCount": total_images_count,
         "table": [
             {
-                "name": "total",
-                "type": "",
-            },
-            {
                 "name": "train",
                 "type": "success"
             },
             {
                 "name": "val",
                 "type": "warning"
-            }
+            },
+            {
+                "name": "total",
+                "type": "gray",
+            },
         ]
     }
 
