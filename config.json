@@ -1,0 +1,19 @@
+{
+  "name": "Hello World App",
+  "type": "app",
+  "categories": [
+    "development"
+  ],
+  "description": "Working demo, use it as a template for your custom apps",
+  "docker_image": "supervisely/base-py-sdk:6",
+  "main_script": "src/my_main_script.py",
+  "modal_template": "src/modal.html",
+  "modal_template_state": {
+    "length": 5
+  },
+  "gui_template": "src/gui.html",
+  "task_location": "application_sessions",
+  "isolate": true,
+  "icon": "https://img.icons8.com/fluent/96/000000/source-code.png",
+  "icon_background": "#FFFFFF"
+}
