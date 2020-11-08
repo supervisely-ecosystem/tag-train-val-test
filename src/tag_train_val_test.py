@@ -38,16 +38,11 @@ def main():
         "started": False,
         "finished": False,
         "totalImagesCount": 850,
-        "splitTable": [
-            {"name": "total", "showTag": False},
-            {"name": "train", "showTag": True, "type": "success"},
-            {"name": "val", "showTag": True, "type": "warning"},
-        ],
     }
 
     state = {
         "trainPercent": 80,
-        "trainCount": 80,
+        "trainCount": 777,
         "selector": "Percent"
     }
 
