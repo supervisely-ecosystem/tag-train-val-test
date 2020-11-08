@@ -44,6 +44,31 @@ def sample_images(api, datasets, train_images_count):
 
     return ds_images_train, ds_images_val, len(train_images), len(val_images)
 
+def _assign_tag(api: sly.Api, split, TAG_META, new_project, created_datasets):
+    for (dataset_id, images, tag)  in split:
+        dataset = api.dataset.get_info_by_id(dataset_id)
+        if dataset.name not in created_datasets:
+            new_dataset = api.dataset.create(new_project.id, dataset.name)
+            created_datasets[dataset.name] = new_dataset
+        new_dataset = created_datasets[dataset.name]
+
+        for batch in sly.batched(images):
+            image_ids = [image_info.id for image_info in batch]
+            image_names = [image_info.name for image_info in batch]
+            ann_infos = api.annotation.download_batch(dataset.id, image_ids)
+            new_annotations = []
+
+            for ann_info in ann_infos:
+                ann_json = ann_info.annotation
+                new_ann = sly.Annotation.from_json(ann_json, META_ORIGINAL)
+                new_ann = new_ann.add_tag(sly.Tag(TAG_META))
+                new_annotations.append(new_ann)
+
+            new_images = api.image.upload_ids(new_dataset.id, image_names, image_ids)
+            new_image_ids = [image_info.id for image_info in new_images]
+            api.annotation.upload_anns(new_image_ids, new_annotations)
+
+
 @my_app.callback("assign_tags")
 @sly.timeit
 def assign_tags(api: sly.Api, task_id, context, state, app_logger):
@@ -69,7 +94,14 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
         if train_count + val_count != TOTAL_IMAGES_COUNT:
             raise ValueError("train_count + val_count != TOTAL_IMAGES_COUNT")
 
-    # project_result = api.project.create()
+    res_name = state["resultProjectName"]
+    new_project = api.project.create(WORKSPACE_ID, res_name, sly.ProjectType.IMAGES,
+                                        description="+ train/val tags", change_name_if_conflict=True)
+    api.project.update_meta(new_project.id, META_RESULT)
+
+    _created_datasets = {}
+    _assign_tag(api, images_train, TRAIN_TAG_META, new_project, _created_datasets)
+    _assign_tag(api, images_val, VAL_TAG_META, new_project, _created_datasets)
 
 
 def main():
@@ -131,5 +163,6 @@ def main():
 
 
 #@TODO: inplace
+#@TODO: progress bar
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
