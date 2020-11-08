@@ -42,27 +42,28 @@ def main():
         "table": [
             {
                 "name": "total",
-                "count": total_images_count,
-                "percent": 100
+                "type": "",
             },
             {
                 "name": "train",
-                "count": total_images_count,
-                "percent": 100
+                "type": "success"
             },
             {
                 "name": "val",
-                "count": total_images_count,
-                "percent": 100
+                "type": "warning"
             }
         ]
     }
 
     state = {
-        "trainPercent": 80,
-        "trainCount": 777,
-        "valPercent": 0,
-        "valCount": 0,
+        "count": {
+            "train": 777,
+            "val": 0
+        },
+        "percent": {
+            "train": 80,
+            "val": 20
+        }
     }
 
     initial_events = [

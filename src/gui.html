@@ -56,5 +56,26 @@
                 {{state.valCount}} images ({{state.valPercent}} %)
             </div>
         </sly-field>
+
+        <el-table :data="data.table" style="width: 100%">
+            <el-table-column label="Tag" width="180">
+                <template scope="scope">
+                    <el-icon name="time"></el-icon>
+                    <span style="margin-left: 10px">{{scope.row.name}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="Number of images" width="180">
+                <template scope="scope">
+                    <el-icon name="time"></el-icon>
+                    <span style="margin-left: 10px">{{scope.row.name}} + 1</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="Percent of images">
+                <template scope="scope">
+                    <el-icon name="time"></el-icon>
+                    <span style="margin-left: 10px">{{scope.row.name}} + 2</span>
+                </template>
+            </el-table-column>
+        </el-table>
     </sly-card>
 </div>
