@@ -57,10 +57,12 @@ def main():
 
     state = {
         "count": {
+            "total": total_images_count,
             "train": 777,
             "val": 0
         },
         "percent": {
+            "total": 100,
             "train": 80,
             "val": 20
         }

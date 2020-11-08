@@ -33,12 +33,12 @@
         <sly-field title="Images with tag 'train'"
                    description="Choose how many images (percent or count) will have tag 'train'">
             <div class="fflex">
-                <el-slider v-model="state.trainPercent"
+                <el-slider v-model="state.percent.train"
                            show-input :min="1" :max="100"
                            style="flex:1; max-width: 99%; margin-left: 15px;"
-                           @input="state.trainCount = (data.totalImagesCount * state.trainPercent / 100).toFixed();
-                                   state.valCount = data.totalImagesCount - state.trainCount;
-                                   state.valPercent = 100 - state.trainPercent"
+                           @input="state.count.train = (data.totalImagesCount * state.percent.train / 100).toFixed();
+                                   state.count.val = data.totalImagesCount - state.count.train;
+                                   state.percent.val = 100 - state.percent.train"
                 ></el-slider>
             </div>
         </sly-field>
@@ -49,11 +49,11 @@
             </div>
             <div class="mt10">
                 <el-tag type="success"><i class="zmdi zmdi-tag mr5"></i>train</el-tag>
-                {{state.trainCount}} images ({{state.trainPercent}} %)
+                {{state.count.train}} images ({{state.percent.train}} %)
             </div>
             <div class="mt10">
                 <el-tag type="warning"><i class="zmdi zmdi-tag mr5"></i>val</el-tag>
-                {{state.valCount}} images ({{state.valPercent}} %)
+                {{state.count.val}} images ({{state.percent.val}} %)
             </div>
         </sly-field>
 
@@ -67,13 +67,13 @@
             <el-table-column label="Number of images" width="180">
                 <template scope="scope">
                     <el-icon name="time"></el-icon>
-                    <span style="margin-left: 10px">{{scope.row.name}} + 1</span>
+                    <span style="margin-left: 10px">{{state.count[scope.row.name]}}</span>
                 </template>
             </el-table-column>
             <el-table-column label="Percent of images">
                 <template scope="scope">
                     <el-icon name="time"></el-icon>
-                    <span style="margin-left: 10px">{{scope.row.name}} + 2</span>
+                    <span style="margin-left: 10px">{{state.percent[scope.row.name]}}%</span>
                 </template>
             </el-table-column>
         </el-table>
