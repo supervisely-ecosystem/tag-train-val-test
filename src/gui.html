@@ -31,17 +31,14 @@
                         Tag 'test' is not available in current version" style="margin-top: 15px;">
 
         <div class="fflex">
+            <el-radio-group size="small" v-model="state.selector">
+                <el-radio-button label="Percent"></el-radio-button>
+                <el-radio-button label="Count"></el-radio-button>
+
+            </el-radio-group>
+
             <el-slider v-model="state.trainPercent" show-input :min="1" :max="100"
-                       style="flex:1; max-width: 99%"></el-slider>
-            %
-            <el-select v-model="state.selector" placeholder="Select">
-                <el-option
-                        v-for="item in data.percentOrCount"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-            </el-select>
+                       style="flex:1; max-width: 99%; margin-left: 15px;"></el-slider>
         </div>
         <div>
             <el-tag>Total images count</el-tag>

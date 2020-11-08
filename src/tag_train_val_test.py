@@ -43,15 +43,12 @@ def main():
             {"name": "train", "showTag": True, "type": "success"},
             {"name": "val", "showTag": True, "type": "warning"},
         ],
-        "percentOrCount": [
-            {"value": "percent", "label": "percent", "key": "percent"},
-            {"value": "count", "label": "count", "key": "count"}
-        ],
     }
 
     state = {
         "trainPercent": 80,
-        "selector": "percent"
+        "trainCount": 80,
+        "selector": "Percent"
     }
 
     initial_events = [
