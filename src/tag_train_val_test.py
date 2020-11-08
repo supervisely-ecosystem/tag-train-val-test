@@ -38,26 +38,23 @@ def main():
         "resultProjectPreviewUrl": "",
         "started": False,
         "finished": False,
-        "tagsStats": {
-            "total": 666,
-            "train": 777,
-            "val": 888,
-            "test": 999
-        },
+        "totalImagesCount": 850,
         "splitTable": [
-            {"name": "total", "asTag": False, "count": 777, "percent": 70},
-            {"name": "train", "asTag": True, "count": 888, "percent": 80},
-            {"name": "val", "asTag": True, "count": 333, "percent": 30},
-            {"name": "test", "asTag": True, "count": 222, "percent": 20},
+            {"name": "total", "showTag": False},
+            {"name": "train", "showTag": True, "type": "success"},
+            {"name": "val", "showTag": True, "type": "warning"},
         ]
     }
 
     state = {
-        "assignTags": {
-            "train": 777,
-            "val": 888,
-            "test": 999
+        "tagsCount": {
+            "train": 50,
+            "val": 30,
         },
+        "tagsPercent": {
+            "train": 50,
+            "val": 30,
+        }
     }
 
     initial_events = [

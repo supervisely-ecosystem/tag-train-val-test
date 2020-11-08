@@ -26,64 +26,42 @@
         </el-col>
     </el-row>
 
-    <sly-card title="Settings" subtitle="some description" style="margin-top: 15px;">
-        <sly-field title="Assign tags" description="Define how many images will be assigned with each tag">
-            <div>
-                <el-tag class="mt5" type="gray" style="width: 80px">Total images</el-tag>
-                {{data.tagsStats.total}}
-            </div>
-            <div>
-                <el-tag class="mt5" type="success" style="width: 80px">
-                    <i class="zmdi zmdi-tag mr5"></i> train
-                </el-tag>
-                <el-input-number size="small" v-model="state.assignTags.train"></el-input-number>
-            </div>
-            <div>
-                <el-tag class="mt5" type="warning" style="width: 80px">
-                    <i class="zmdi zmdi-tag mr5"></i> val
-                </el-tag>
-                <el-input-number size="small" v-model="state.assignTags.train"></el-input-number>
-            </div>
-            <div>
-                <el-tag class="mt5" type="primary" style="width: 80px">
-                    <i class="zmdi zmdi-tag mr5"></i> test
-                </el-tag>
-                <el-input-number size="small" v-model="state.assignTags.train"></el-input-number>
-            </div>
-        </sly-field>
-<!--        <el-button :disabled="data.finished === true" type="text" @click="command('count_train_val_split')">-->
-<!--            <i class="zmdi zmdi-refresh"></i> Refresh stats-->
-<!--        </el-button>-->
-
-        <el-table :disabled="data.finished === true" :data="data.splitTable">
-            <el-table-column prop="name" label="Tag"></el-table-column>
-            <el-table-column prop="count" label="Images Count"></el-table-column>
-            <el-table-column prop="percent" label="Images Percent (%)"></el-table-column>
+    <sly-card title="Settings"
+              subtitle="Tag 'train' has to be assigned to at least one image and the same for tag 'val'.
+                        Tag 'test' is not available in current version" style="margin-top: 15px;">
+<!--        -->
+        <el-table :disabled="data.finished === true" :data="data.splitTable" border>
+            <el-table-column prop="name" label="Tag" width="100px">
+                <template scope="scope">
+                    <div v-if="scope.row.showTag === false">{{scope.row.name}}</div>
+                    <el-tag v-if="scope.row.showTag === true" :type="scope.row.type">
+                        <i class="zmdi zmdi-tag mr5"></i>{{scope.row.name}}
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="count" label="Images Count">
+                <template scope="scope">
+                    <div v-if="scope.row.showTag === false">{{data.totalImagesCount}}</div>
+                    <el-slider
+                            v-if="scope.row.showTag === true"
+                            v-model="scope.row.count"
+                            show-input
+                            :min="1"
+                            :max="data.totalImagesCount - 1"
+                            :change="data.totalImagesCount"
+                    ></el-slider>
+                </template>
+            </el-table-column>
+            <el-table-column prop="percent" label="Images Percent (%)">
+                <template scope="scope">
+                    <div v-if="scope.row.showTag === false">100%</div>
+                    <el-slider
+                            v-if="scope.row.showTag === true"
+                            v-model="state.tagsPercent[scope.row.name]"
+                            show-input
+                    ></el-slider>
+                </template>
+            </el-table-column>
         </el-table>
-
-<!--        <div>-->
-
-<!--            {{data.tagsStats.train}}-->
-<!--        </div>-->
-<!--        <div>-->
-
-<!--            {{data.tagsStats.val}}-->
-<!--        </div>-->
-<!--        <div>-->
-
-<!--            {{data.tagsStats.test}}-->
-<!--        </div>-->
     </sly-card>
-
-
-
-    <!--    <el-row :gutter="20">-->
-    <!--        <el-col :span="12">-->
-    <!--            <sly-card title="Settings" subtitle="some description">-->
-    <!--                <sly-field title="Prefix" description="will be added to the beginning of the generated string">-->
-    <!--                    <el-input v-model="state.prefix"></el-input>-->
-    <!--                </sly-field>-->
-    <!--                <el-button style="margin-top: 10px;" @click="command('generate')"> Generate!</el-button>-->
-    <!--            </sly-card>-->
-    <!--        </el-col>-->
 </div>
