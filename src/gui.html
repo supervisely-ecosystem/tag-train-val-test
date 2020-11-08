@@ -19,7 +19,7 @@
                 <el-progress v-if="data.started === true && data.progress !== 100"
                              :percentage="data.progress"></el-progress>
                 <el-button :disabled="data.finished === true" type="primary"
-                           @click="command('create_trainset')" v-if="data.started === false">
+                           @click="command('assign_tags')" v-if="data.started === false">
                     <i class="zmdi zmdi-play" style="margin-right: 5px"></i> Run
                 </el-button>
             </sly-card>
