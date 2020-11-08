@@ -30,36 +30,31 @@
               subtitle="Tag 'train' has to be assigned to at least one image and the same for tag 'val'.
                         Tag 'test' is not available in current version" style="margin-top: 15px;">
 
-        <div class="fflex">
-            <el-radio-group size="small" v-model="state.selector">
-                <el-radio-button label="Percent"></el-radio-button>
-                <el-radio-button label="Count"></el-radio-button>
-            </el-radio-group>
-
-            <el-slider v-if="state.selector === 'Percent'"
-                       v-model="state.trainPercent"
-                       show-input :min="1" :max="100"
-                       style="flex:1; max-width: 99%; margin-left: 15px;"
-            ></el-slider>
-
-            <el-slider v-if="state.selector === 'Count'"
-                       v-model="state.trainCount"
-                       show-input :min="1" :max="data.totalImagesCount-1"
-                       style="flex:1; max-width: 99%; margin-left: 15px;"
-            ></el-slider>
-
-        </div>
-        <pre>{{state}}</pre>
-        <div>
-            <el-tag>Total images count</el-tag>
-            {{data.totalImagesCount}} (100%)
-        </div>
-        <div class="mt10">
-            <el-tag type="success"><i class="zmdi zmdi-tag mr5"></i>train</el-tag>
-        </div>
-        <div class="mt10">
-            <el-tag type="warning"><i class="zmdi zmdi-tag mr5"></i>val</el-tag>
-        </div>
-
+        <sly-field title="Images with tag 'train'"
+                   description="Choose how many images (percent or count) will have tag 'train'">
+            <div class="fflex">
+                <el-slider v-model="state.trainPercent"
+                           show-input :min="1" :max="100"
+                           style="flex:1; max-width: 99%; margin-left: 15px;"
+                           @input="state.trainCount = (data.totalImagesCount * state.trainPercent / 100).toFixed();
+                                   state.valCount = data.totalImagesCount - state.trainCount;
+                                   state.valPercent = 100 - state.trainPercent"
+                ></el-slider>
+            </div>
+        </sly-field>
+        <sly-field title="Results overview" description="How many images will have tag train/val">
+            <div>
+                <el-tag>Total images count</el-tag>
+                {{data.totalImagesCount}} images (100%)
+            </div>
+            <div class="mt10">
+                <el-tag type="success"><i class="zmdi zmdi-tag mr5"></i>train</el-tag>
+                {{state.trainCount}} images ({{state.trainPercent}} %)
+            </div>
+            <div class="mt10">
+                <el-tag type="warning"><i class="zmdi zmdi-tag mr5"></i>val</el-tag>
+                {{state.valCount}} images ({{state.valPercent}} %)
+            </div>
+        </sly-field>
     </sly-card>
 </div>

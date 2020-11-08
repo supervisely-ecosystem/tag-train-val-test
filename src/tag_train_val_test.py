@@ -27,6 +27,7 @@ def main():
 
     api = sly.Api.from_env()
 
+    total_images_count = 850
     data = {
         "projectId": 0,
         "projectName": "0",
@@ -37,13 +38,31 @@ def main():
         "resultProjectPreviewUrl": "",
         "started": False,
         "finished": False,
-        "totalImagesCount": 850,
+        "totalImagesCount": total_images_count,
+        "table": [
+            {
+                "name": "total",
+                "count": total_images_count,
+                "percent": 100
+            },
+            {
+                "name": "train",
+                "count": total_images_count,
+                "percent": 100
+            },
+            {
+                "name": "val",
+                "count": total_images_count,
+                "percent": 100
+            }
+        ]
     }
 
     state = {
         "trainPercent": 80,
         "trainCount": 777,
-        "selector": "Percent"
+        "valPercent": 0,
+        "valCount": 0,
     }
 
     initial_events = [
