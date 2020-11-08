@@ -58,10 +58,11 @@
         </sly-field>
 
         <el-table :data="data.table" style="width: 100%">
-            <el-table-column label="Tag" width="180">
+            <el-table-column label="Info" width="180">
                 <template scope="scope">
-                    <el-icon name="time"></el-icon>
-                    <span style="margin-left: 10px">{{scope.row.name}}</span>
+                    <el-tag :type="scope.row.type">
+                        <i v-if="scope.row.name !== 'total'" class="zmdi zmdi-tag mr5"></i>{{scope.row.name}}
+                    </el-tag>
                 </template>
             </el-table-column>
             <el-table-column label="Number of images" width="180">
