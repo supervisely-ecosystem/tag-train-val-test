@@ -65,7 +65,7 @@
         <sly-field style="margin-top: 15px;"
                    title="FOR DEBUG ONLY: Use all train images in validation"
                    description="Images are used for both training and validation to verify if training pipeline
-                   is capable of overfitting. We recommend to use this option only to debug purposes with tiny datasets">
+                   is capable of overfitting. We recommend to use this option only to debug NN with tiny datasets">
             <el-checkbox
                     v-model="state.shareImagesBetweenSplits"
                     @change="if (state.shareImagesBetweenSplits === true) {
