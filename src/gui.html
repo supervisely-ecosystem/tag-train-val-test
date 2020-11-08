@@ -51,6 +51,7 @@
 
                     <el-slider v-if="scope.row.name === 'train'"
                                v-model="state.percent.train"
+                               :disabled="state.sliderDisabled"
                                show-input :min="1" :max="100"
                                style="flex:1; max-width: 99%; margin-left: 15px;"
                                @input="state.count.train = (data.totalImagesCount * state.percent.train / 100).toFixed();
@@ -67,11 +68,15 @@
                    is capable of overfitting. We recommend to use this option only to debug purposes with tiny datasets">
             <el-checkbox
                     v-model="state.shareImagesBetweenSplits"
-                    @change="if (state.shareImagesBetweenSplits === True) {
+                    @change="if (state.shareImagesBetweenSplits === true) {
                                 state.count.train = data.totalImagesCount;
                                 state.count.val = data.totalImagesCount;
                                 state.percent.train = 100;
                                 state.percent.val = 100;
+                                state.sliderDisabled = true;
+                             } else {
+                                state.sliderDisabled = false;
+                                state.percent.train = 80
                              }">
                 Train == Validation
             </el-checkbox>

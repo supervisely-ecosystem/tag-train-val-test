@@ -55,18 +55,21 @@ def main():
         ]
     }
 
+    train_percent = 80
+    train_count = int(total_images_count / 100 * train_percent)
     state = {
         "count": {
             "total": total_images_count,
-            "train": 777,
-            "val": 0
+            "train": train_count,
+            "val": total_images_count - train_count
         },
         "percent": {
             "total": 100,
-            "train": 80,
-            "val": 20
+            "train": train_percent,
+            "val": 100 - train_percent
         },
-        "shareImagesBetweenSplits": False
+        "shareImagesBetweenSplits": False,
+        "sliderDisabled": False
     }
 
     initial_events = [
