@@ -3,10 +3,9 @@ import random
 import string
 import supervisely_lib as sly
 
-
 my_app = sly.AppService()
 
-LENGTH = 5 #int(os.environ['modal.state.length'])
+LENGTH = 5  # int(os.environ['modal.state.length'])
 
 
 @my_app.callback("generate")
@@ -24,7 +23,7 @@ def preprocessing(api: sly.Api, task_id, context, state, app_logger):
 
 
 def main():
-    sly.logger.info("Script arguments from modal dialog box",  extra={"length: ": LENGTH})
+    sly.logger.info("Script arguments from modal dialog box", extra={"length: ": LENGTH})
 
     api = sly.Api.from_env()
 
@@ -43,18 +42,16 @@ def main():
             {"name": "total", "showTag": False},
             {"name": "train", "showTag": True, "type": "success"},
             {"name": "val", "showTag": True, "type": "warning"},
-        ]
+        ],
+        "percentOrCount": [
+            {"value": "percent", "label": "percent", "key": "percent"},
+            {"value": "count", "label": "count", "key": "count"}
+        ],
     }
 
     state = {
-        "tagsCount": {
-            "train": 50,
-            "val": 30,
-        },
-        "tagsPercent": {
-            "train": 50,
-            "val": 30,
-        }
+        "trainPercent": 80,
+        "selector": "percent"
     }
 
     initial_events = [

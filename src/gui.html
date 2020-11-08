@@ -26,42 +26,33 @@
         </el-col>
     </el-row>
 
-    <sly-card title="Settings"
+    <sly-card title="Settings: Train / Val splits"
               subtitle="Tag 'train' has to be assigned to at least one image and the same for tag 'val'.
                         Tag 'test' is not available in current version" style="margin-top: 15px;">
-<!--        -->
-        <el-table :disabled="data.finished === true" :data="data.splitTable" border>
-            <el-table-column prop="name" label="Tag" width="100px">
-                <template scope="scope">
-                    <div v-if="scope.row.showTag === false">{{scope.row.name}}</div>
-                    <el-tag v-if="scope.row.showTag === true" :type="scope.row.type">
-                        <i class="zmdi zmdi-tag mr5"></i>{{scope.row.name}}
-                    </el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column prop="count" label="Images Count">
-                <template scope="scope">
-                    <div v-if="scope.row.showTag === false">{{data.totalImagesCount}}</div>
-                    <el-slider
-                            v-if="scope.row.showTag === true"
-                            v-model="scope.row.count"
-                            show-input
-                            :min="1"
-                            :max="data.totalImagesCount - 1"
-                            :change="data.totalImagesCount"
-                    ></el-slider>
-                </template>
-            </el-table-column>
-            <el-table-column prop="percent" label="Images Percent (%)">
-                <template scope="scope">
-                    <div v-if="scope.row.showTag === false">100%</div>
-                    <el-slider
-                            v-if="scope.row.showTag === true"
-                            v-model="state.tagsPercent[scope.row.name]"
-                            show-input
-                    ></el-slider>
-                </template>
-            </el-table-column>
-        </el-table>
+
+        <div class="fflex">
+            <el-slider v-model="state.trainPercent" show-input :min="1" :max="100"
+                       style="flex:1; max-width: 99%"></el-slider>
+            %
+            <el-select v-model="state.selector" placeholder="Select">
+                <el-option
+                        v-for="item in data.percentOrCount"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+        </div>
+        <div>
+            <el-tag>Total images count</el-tag>
+            {{data.totalImagesCount}} (100%)
+        </div>
+        <div class="mt10">
+            <el-tag type="success"><i class="zmdi zmdi-tag mr5"></i>train</el-tag>
+        </div>
+        <div class="mt10">
+            <el-tag type="warning"><i class="zmdi zmdi-tag mr5"></i>val</el-tag>
+        </div>
+
     </sly-card>
 </div>
