@@ -27,9 +27,8 @@
     </el-row>
 
     <sly-card title="Settings: Train / Val splits"
-              subtitle="Tag 'train' has to be assigned to at least one image and the same for tag 'val'.
-                        Tag 'test' is not available in current version" style="margin-top: 15px;">
-
+              subtitle="Tag 'train' has to be assigned to at least one image and the same for tag 'val'"
+              style="margin-top: 15px;">
         <el-table :data="data.table" style="width: 100%">
             <el-table-column label="Info" width="180">
                 <template scope="scope">
@@ -73,6 +72,9 @@
                    title="FOR DEBUG ONLY: Use all train images in validation"
                    description="Images are used for both training and validation to verify if training pipeline
                    is capable of overfitting. We recommend to use this option only to debug NN with tiny datasets">
+            <sly-icon slot="icon" :options="{ color: '#0a04f9', bgColor: '#d9d4ff', rounded: false }">
+                <i class="zmdi zmdi-share"></i>
+            </sly-icon>
             <el-checkbox
                     v-model="state.shareImagesBetweenSplits"
                     @change="if (state.shareImagesBetweenSplits === true) {
@@ -93,6 +95,9 @@
                    title="Advanced: inplace operation (keep by default if you are not sure)"
                    description="If checked new project will not be created and tags assignment will be applied to
                    original project (i.e. original project will be modified.">
+            <sly-icon slot="icon" :options="{ color: '#0a04f9', bgColor: '#d9d4ff', rounded: false }">
+                <i class="zmdi zmdi-copy"></i>
+            </sly-icon>
             <el-checkbox v-model="state.inplace" disabled="true"> Modify original project</el-checkbox>
         </sly-field>
 
