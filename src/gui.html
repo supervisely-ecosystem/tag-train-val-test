@@ -63,6 +63,13 @@
         </el-table>
 
         <sly-field style="margin-top: 15px;"
+                   title="Result project name"
+                   description="Choose the name of result project. If name already exists, new name will be generated
+                                by adding numeric suffix (e.g. '_007')">
+            <el-input placeholder="Please input" v-model="state.resultProjectName"></el-input>
+        </sly-field>
+
+        <sly-field style="margin-top: 15px;"
                    title="FOR DEBUG ONLY: Use all train images in validation"
                    description="Images are used for both training and validation to verify if training pipeline
                    is capable of overfitting. We recommend to use this option only to debug NN with tiny datasets">

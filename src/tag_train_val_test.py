@@ -69,6 +69,8 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
         if train_count + val_count != TOTAL_IMAGES_COUNT:
             raise ValueError("train_count + val_count != TOTAL_IMAGES_COUNT")
 
+    # project_result = api.project.create()
+
 
 def main():
     sly.logger.info("Input params", extra={"context.teamId": TEAM_ID,
@@ -120,7 +122,8 @@ def main():
         },
         "shareImagesBetweenSplits": False,
         "sliderDisabled": False,
-        "inplace": False
+        "inplace": False,
+        "resultProjectName": "{} (with train/val tags)".format(PROJECT.name)
     }
 
     # Run application service
@@ -128,6 +131,5 @@ def main():
 
 
 #@TODO: inplace
-
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
