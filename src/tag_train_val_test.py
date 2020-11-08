@@ -10,6 +10,15 @@ PROJECT_ID = int(os.environ['modal.state.slyProjectId'])
 my_app = sly.AppService()
 PROJECT = None
 TOTAL_IMAGES_COUNT = None
+META_ORIGINAL = None
+META_RESULT = None
+
+TRAIN_NAME = 'train'
+TRAIN_COLOR = [0, 255, 0] #RGB
+VAL_NAME = 'val'
+VAL_COLOR = [255, 128, 0]
+TRAIN_TAG_META = sly.TagMeta(TRAIN_NAME, sly.TagValueType.NONE, color=TRAIN_COLOR)
+VAL_TAG_META = sly.TagMeta(VAL_NAME, sly.TagValueType.NONE, color=VAL_COLOR)
 
 
 def sample_images(api, datasets, train_images_count):
@@ -61,19 +70,21 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
             raise ValueError("train_count + val_count != TOTAL_IMAGES_COUNT")
 
 
-
-
-
-
-
 def main():
     sly.logger.info("Input params", extra={"context.teamId": TEAM_ID,
                                            "context.workspaceId": WORKSPACE_ID,
                                            "modal.state.slyProjectId": PROJECT_ID})
-    global PROJECT, TOTAL_IMAGES_COUNT
+    global PROJECT, TOTAL_IMAGES_COUNT, META_ORIGINAL, META_NEW
 
     api = sly.Api.from_env()
     PROJECT = api.project.get_info_by_id(PROJECT_ID)
+    meta_json = api.project.get_meta(PROJECT.id)
+    META_ORIGINAL = sly.ProjectMeta.from_json(meta_json)
+    if META_ORIGINAL.get_tag_meta(TRAIN_NAME) is not None:
+        raise KeyError("Tag {!r} already exists in project meta".format(TRAIN_NAME))
+    if META_ORIGINAL.get_tag_meta(VAL_NAME) is not None:
+        raise KeyError("Tag {!r} already exists in project meta".format(VAL_NAME))
+    META_NEW = META_ORIGINAL.add_tag_metas([TRAIN_TAG_META, VAL_TAG_META])
 
     TOTAL_IMAGES_COUNT = api.project.get_images_count(PROJECT.id)
     data = {
@@ -88,7 +99,7 @@ def main():
         "finished": False,
         "totalImagesCount": TOTAL_IMAGES_COUNT,
         "table": [
-            {"name": "train", "type": "success"},
+            {"name": TRAIN_NAME, "type": "success"},
             {"name": "val", "type": "warning"},
             {"name": "total", "type": "gray"},
         ]
@@ -99,12 +110,12 @@ def main():
     state = {
         "count": {
             "total": TOTAL_IMAGES_COUNT,
-            "train": train_count,
+            TRAIN_NAME: train_count,
             "val": TOTAL_IMAGES_COUNT - train_count
         },
         "percent": {
             "total": 100,
-            "train": train_percent,
+            TRAIN_NAME: train_percent,
             "val": 100 - train_percent
         },
         "shareImagesBetweenSplits": False,
@@ -115,6 +126,8 @@ def main():
     # Run application service
     my_app.run(data=data, state=state)
 
+
+#@TODO: inplace
 
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
