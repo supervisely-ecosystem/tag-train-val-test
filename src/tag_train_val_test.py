@@ -29,7 +29,22 @@ def main():
     api = sly.Api.from_env()
 
     data = {
-        "randomString": "hello!"
+        "projectId": 0,
+        "projectName": "0",
+        "projectPreviewUrl": "",
+        "progress": 0,
+        "resultProjectId": 0,
+        "resultProject": "1",
+        "resultProjectPreviewUrl": "",
+        "started": False,
+        "finished": False,
+        "tagsStats": {
+            "total": 777,
+            "train": 888,
+            "val": 999,
+            "test": 777
+        }
+
     }
 
     state = {
