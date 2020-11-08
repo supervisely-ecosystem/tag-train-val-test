@@ -1,6 +1,6 @@
 <div>
     <el-row :gutter="10" type="flex">
-        <el-col :span="8">
+        <el-col :span="12">
             <sly-card title="Input">
                 <sly-field title="" description="Project">
                     <a slot="title" target="_blank"
@@ -27,42 +27,55 @@
     </el-row>
 
     <sly-card title="Settings" subtitle="some description" style="margin-top: 15px;">
+        <sly-field title="Assign tags" description="Define how many images will be assigned with each tag">
+            <div>
+                <el-tag class="mt5" type="gray" style="width: 80px">Total images</el-tag>
+                {{data.tagsStats.total}}
+            </div>
+            <div>
+                <el-tag class="mt5" type="success" style="width: 80px">
+                    <i class="zmdi zmdi-tag mr5"></i> train
+                </el-tag>
+                <el-input-number size="small" v-model="state.assignTags.train"></el-input-number>
+            </div>
+            <div>
+                <el-tag class="mt5" type="warning" style="width: 80px">
+                    <i class="zmdi zmdi-tag mr5"></i> val
+                </el-tag>
+                <el-input-number size="small" v-model="state.assignTags.train"></el-input-number>
+            </div>
+            <div>
+                <el-tag class="mt5" type="primary" style="width: 80px">
+                    <i class="zmdi zmdi-tag mr5"></i> test
+                </el-tag>
+                <el-input-number size="small" v-model="state.assignTags.train"></el-input-number>
+            </div>
+        </sly-field>
+<!--        <el-button :disabled="data.finished === true" type="text" @click="command('count_train_val_split')">-->
+<!--            <i class="zmdi zmdi-refresh"></i> Refresh stats-->
+<!--        </el-button>-->
 
-        <el-button :disabled="data.finished === true" type="text" @click="command('count_train_val_split')">
-            <i class="zmdi zmdi-refresh"></i> Refresh stats
-        </el-button>
-        <div>
-            <el-tag class="mt5" type="gray" style="width: 80px">Total images</el-tag>
-            {{data.tagsStats.total}}
-        </div>
-        <div>
-            <el-tag class="mt5" type="success" style="width: 80px">
-                <i class="zmdi zmdi-tag mr5"></i> train
-            </el-tag>
-            {{data.tagsStats.train}}
-        </div>
-        <div>
-            <el-tag class="mt5" type="warning" style="width: 80px">
-                <i class="zmdi zmdi-tag mr5"></i> val
-            </el-tag>
-            {{data.tagsStats.val}}
-        </div>
-        <div>
-            <el-tag class="mt5" type="primary" style="width: 80px">
-                <i class="zmdi zmdi-tag mr5"></i> test
-            </el-tag>
-            {{data.tagsStats.test}}
-        </div>
+        <el-table :disabled="data.finished === true" :data="data.splitTable">
+            <el-table-column prop="name" label="Tag"></el-table-column>
+            <el-table-column prop="count" label="Images Count"></el-table-column>
+            <el-table-column prop="percent" label="Images Percent (%)"></el-table-column>
+        </el-table>
 
-        <!--        <el-table :data="data.splitTable" class="ultra-table">-->
-        <!--            <el-table-column prop="name" label="info">-->
-        <!--                <template slot-scope="{ row }">-->
-        <!--                    <el-tag type="gray">{{row.name}}</el-tag>-->
-        <!--                </template>-->
-        <!--            </el-table-column>-->
-        <!--            <el-table-column prop="count" label="images count"></el-table-column>-->
-        <!--        </el-table>-->
+<!--        <div>-->
+
+<!--            {{data.tagsStats.train}}-->
+<!--        </div>-->
+<!--        <div>-->
+
+<!--            {{data.tagsStats.val}}-->
+<!--        </div>-->
+<!--        <div>-->
+
+<!--            {{data.tagsStats.test}}-->
+<!--        </div>-->
     </sly-card>
+
+
 
     <!--    <el-row :gutter="20">-->
     <!--        <el-col :span="12">-->

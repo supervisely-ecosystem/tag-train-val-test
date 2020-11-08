@@ -39,16 +39,25 @@ def main():
         "started": False,
         "finished": False,
         "tagsStats": {
-            "total": 777,
-            "train": 888,
-            "val": 999,
-            "test": 777
-        }
-
+            "total": 666,
+            "train": 777,
+            "val": 888,
+            "test": 999
+        },
+        "splitTable": [
+            {"name": "total", "asTag": False, "count": 777, "percent": 70},
+            {"name": "train", "asTag": True, "count": 888, "percent": 80},
+            {"name": "val", "asTag": True, "count": 333, "percent": 30},
+            {"name": "test", "asTag": True, "count": 222, "percent": 20},
+        ]
     }
 
     state = {
-        "prefix": "abc_"
+        "assignTags": {
+            "train": 777,
+            "val": 888,
+            "test": 999
+        },
     }
 
     initial_events = [
