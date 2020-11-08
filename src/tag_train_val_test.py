@@ -65,7 +65,8 @@ def main():
             "total": 100,
             "train": 80,
             "val": 20
-        }
+        },
+        "shareImagesBetweenSplits": False
     }
 
     initial_events = [

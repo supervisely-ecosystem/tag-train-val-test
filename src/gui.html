@@ -29,7 +29,6 @@
     <sly-card title="Settings: Train / Val splits"
               subtitle="Tag 'train' has to be assigned to at least one image and the same for tag 'val'.
                         Tag 'test' is not available in current version" style="margin-top: 15px;">
-        
 
         <el-table :data="data.table" style="width: 100%">
             <el-table-column label="Info" width="180">
@@ -41,14 +40,12 @@
             </el-table-column>
             <el-table-column label="Number of images" width="180">
                 <template scope="scope">
-                    <el-icon name="time"></el-icon>
                     <span style="margin-left: 10px">{{state.count[scope.row.name]}}</span>
                 </template>
             </el-table-column>
             <el-table-column label="Percent of images">
                 <template scope="scope">
                     <div v-if="scope.row.name !== 'train'">
-                        <el-icon name="time"></el-icon>
                         <span style="margin-left: 10px">{{state.percent[scope.row.name]}}%</span>
                     </div>
 
@@ -60,9 +57,25 @@
                                        state.count.val = data.totalImagesCount - state.count.train;
                                        state.percent.val = 100 - state.percent.train"
                     ></el-slider>
-
                 </template>
             </el-table-column>
         </el-table>
+
+        <sly-field style="margin-top: 15px;"
+                   title="FOR DEBUG ONLY: Use all train images in validation"
+                   description="Images are used for both training and validation to verify if training pipeline
+                   is capable of overfitting. We recommend to use this option only to debug purposes with tiny datasets">
+            <el-checkbox
+                    v-model="state.shareImagesBetweenSplits"
+                    @change="if (state.shareImagesBetweenSplits === True) {
+                                state.count.train = data.totalImagesCount;
+                                state.count.val = data.totalImagesCount;
+                                state.percent.train = 100;
+                                state.percent.val = 100;
+                             }">
+                Train == Validation
+            </el-checkbox>
+        </sly-field>
+
     </sly-card>
 </div>
