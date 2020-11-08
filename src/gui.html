@@ -82,5 +82,12 @@
             </el-checkbox>
         </sly-field>
 
+        <sly-field style="margin-top: 15px;"
+                   title="Advanced: inplace operation (keep by default if you are not sure)"
+                   description="If checked new project will not be created and tags assignment will be applied to
+                   original project (i.e. original project will be modified.">
+            <el-checkbox v-model="state.inplace" disabled="true"> Modify original project</el-checkbox>
+        </sly-field>
+
     </sly-card>
 </div>
