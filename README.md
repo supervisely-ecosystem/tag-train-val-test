@@ -25,7 +25,9 @@ Application tags images in project. User can definine percentage of images that 
 
 ## How To Run
 **Step 1**: dfsdfsf
+
 **Step 2**: dfsdfsf
+
 **Step 3**: dfsdfsf
 
 ## How to Use
