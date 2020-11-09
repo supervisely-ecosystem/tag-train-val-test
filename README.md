@@ -8,7 +8,7 @@
 
   <a href="#Overview">Overview</a> •
   <a href="#How-To-Run">How To Run</a> •
-  <a href="#History-Of-Runs">History of runs</a>
+  <a href="#How-To-Use">How To Use</a>
 </p>
 
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
@@ -21,11 +21,10 @@
 
 ## Overview
 
-Report provides
+Report provides Assigns tags (train/val/test) to images. Training procedure will use these tags to split data.
 
+## How To Run
+xxx
 
-# tag-train-val-test
-
-https://i.imgur.com/LG2Ps6Y.png
-
-Assigns tags (train/val/test) to images. Training procedure will use these tags to split data.
+## How to Use
+yyy
