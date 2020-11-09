@@ -134,7 +134,7 @@ def main():
         "totalImagesCount": TOTAL_IMAGES_COUNT,
         "table": [
             {"name": TRAIN_NAME, "type": "success"},
-            {"name": "val", "type": "warning"},
+            {"name": "val", "type": "primary"},
             {"name": "total", "type": "gray"},
         ]
     }
@@ -155,7 +155,7 @@ def main():
         "shareImagesBetweenSplits": False,
         "sliderDisabled": False,
         "inplace": False,
-        "resultProjectName": "{} (with train/val tags)".format(PROJECT.name)
+        "resultProjectName": "{} (with train-val tags)".format(PROJECT.name)
     }
 
     # Run application service
