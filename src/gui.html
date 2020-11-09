@@ -58,10 +58,11 @@
                                    :disabled="state.sliderDisabled || data.finished"
                                    show-input :min="1" :max="100"
                                    style="flex:1; max-width: 99%; margin-left: 15px;"
-                                   @input="state.count.train = (data.totalImagesCount * state.percent.train / 100).toFixed();
+                                   @input="state.count.train = parseInt(data.totalImagesCount * state.percent.train / 100, 10);
                                            state.count.val = data.totalImagesCount - state.count.train;
                                            state.percent.val = 100 - state.percent.train"
                         ></el-slider>
+<!--                        (data.totalImagesCount * state.percent.train / 100).toFixed()-->
                     </template>
                 </el-table-column>
             </el-table>

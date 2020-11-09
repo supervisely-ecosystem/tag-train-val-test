@@ -40,7 +40,7 @@ def sample_images(api, datasets, train_images_count):
         print("type(train_images_count): ", type(train_images_count))
         print("len(shuffled_images):", type(shuffled_images))
         raise e
-    
+
     ds_images_train = defaultdict(list)
     for image_info in train_images:
         ds_images_train[image_info.dataset_id].append(image_info)
