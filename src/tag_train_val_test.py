@@ -104,8 +104,6 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
     progress = sly.Progress("Tagging", TOTAL_IMAGES_COUNT)
 
     if share_images is True:
-        if train_count != val_count:
-            raise ValueError("Share images option is enabled, but train_count != val_count")
         if _cnt_val == 0:
             _created_datasets = {}
             _assign_tag(api, images_train, [TRAIN_TAG_META, VAL_TAG_META], new_project, _created_datasets, progress)
