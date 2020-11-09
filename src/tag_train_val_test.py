@@ -31,9 +31,16 @@ def sample_images(api, datasets, train_images_count):
     shuffled_images = all_images.copy()
     random.shuffle(shuffled_images)
 
-    train_images = shuffled_images[:int(train_images_count)]
-    val_images = shuffled_images[int(train_images_count):]
-
+    try:
+        train_images = shuffled_images[:int(train_images_count)]
+        val_images = shuffled_images[int(train_images_count):]
+    except Exception as e:
+        print("type(shuffled_images):", type(shuffled_images))
+        print("train_images_count: ", train_images_count)
+        print("type(train_images_count): ", type(train_images_count))
+        print("len(shuffled_images):", type(shuffled_images))
+        raise e
+    
     ds_images_train = defaultdict(list)
     for image_info in train_images:
         ds_images_train[image_info.dataset_id].append(image_info)
