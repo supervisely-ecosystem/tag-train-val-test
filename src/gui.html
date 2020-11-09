@@ -26,45 +26,51 @@
         </el-col>
     </el-row>
 
-    <sly-card title="Settings: Train / Val splits"
-              subtitle="Tag 'train' has to be assigned to at least one image and the same for tag 'val'"
-              style="margin-top: 15px;">
-        <el-table :data="data.table" style="width: 100%">
-            <el-table-column label="Info" width="180">
-                <template scope="scope">
-                    <el-tag :type="scope.row.type">
-                        <i v-if="scope.row.name !== 'total'" class="zmdi zmdi-tag mr5"></i>{{scope.row.name}}
-                    </el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column label="Number of images" width="180">
-                <template scope="scope">
-                    <span style="margin-left: 10px">{{state.count[scope.row.name]}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="Percent of images">
-                <template scope="scope">
-                    <div v-if="scope.row.name !== 'train'">
-                        <span style="margin-left: 10px">{{state.percent[scope.row.name]}}%</span>
-                    </div>
+    <sly-card title="Settings" style="margin-top: 15px;">
+        <sly-field title="Train / Val proportion" description="Choose how tags will be split">
+            <sly-icon slot="icon" :options="{ color: '#2cd26e', bgColor: '#d8f8e7', rounded: false }">
+                <i class="zmdi zmdi-arrow-split"></i>
+            </sly-icon>
+            <el-table :data="data.table" style="width: 100%">
+                <el-table-column label="Info" width="180">
+                    <template scope="scope">
+                        <el-tag :type="scope.row.type">
+                            <i v-if="scope.row.name !== 'total'" class="zmdi zmdi-tag mr5"></i>{{scope.row.name}}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Number of images" width="180">
+                    <template scope="scope">
+                        <span style="margin-left: 10px">{{state.count[scope.row.name]}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Percent of images">
+                    <template scope="scope">
+                        <div v-if="scope.row.name !== 'train'">
+                            <span style="margin-left: 10px">{{state.percent[scope.row.name]}}%</span>
+                        </div>
 
-                    <el-slider v-if="scope.row.name === 'train'"
-                               v-model="state.percent.train"
-                               :disabled="state.sliderDisabled"
-                               show-input :min="1" :max="100"
-                               style="flex:1; max-width: 99%; margin-left: 15px;"
-                               @input="state.count.train = (data.totalImagesCount * state.percent.train / 100).toFixed();
-                                       state.count.val = data.totalImagesCount - state.count.train;
-                                       state.percent.val = 100 - state.percent.train"
-                    ></el-slider>
-                </template>
-            </el-table-column>
-        </el-table>
+                        <el-slider v-if="scope.row.name === 'train'"
+                                   v-model="state.percent.train"
+                                   :disabled="state.sliderDisabled"
+                                   show-input :min="1" :max="100"
+                                   style="flex:1; max-width: 99%; margin-left: 15px;"
+                                   @input="state.count.train = (data.totalImagesCount * state.percent.train / 100).toFixed();
+                                           state.count.val = data.totalImagesCount - state.count.train;
+                                           state.percent.val = 100 - state.percent.train"
+                        ></el-slider>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </sly-field>
 
         <sly-field style="margin-top: 15px;"
                    title="Result project name"
                    description="Choose the name of result project. If name already exists, new name will be generated
                                 by adding numeric suffix (e.g. '_007')">
+            <sly-icon slot="icon" :options="{ color: '#ceadff', bgColor: '#f6ebff', rounded: false }">
+                <i class="zmdi zmdi-collection-folder-image"></i>
+            </sly-icon>
             <el-input placeholder="Please input" v-model="state.resultProjectName"></el-input>
         </sly-field>
 
@@ -72,7 +78,7 @@
                    title="FOR NN DEBUG: Use all train images in validation"
                    description="Images are used for both training and validation to verify if training pipeline
                    is capable of overfitting. We recommend to use this option only to debug NN with tiny datasets">
-            <sly-icon slot="icon" :options="{ color: '#0a04f9', bgColor: '#d9d4ff', rounded: false }">
+            <sly-icon slot="icon" :options="{ color: '#ff8461', bgColor: '#ffebe3', rounded: false }">
                 <i class="zmdi zmdi-share"></i>
             </sly-icon>
             <el-checkbox
@@ -95,7 +101,7 @@
                    title="Advanced: inplace operation (keep by default if you are not sure)"
                    description="If checked new project will not be created and tags assignment will be applied to
                    original project (i.e. original project will be modified.">
-            <sly-icon slot="icon" :options="{ color: '#0a04f9', bgColor: '#d9d4ff', rounded: false }">
+            <sly-icon slot="icon" :options="{ color: '#ff8461', bgColor: '#ffebe3', rounded: false }">
                 <i class="zmdi zmdi-copy"></i>
             </sly-icon>
             <el-checkbox v-model="state.inplace" disabled="true"> Modify original project</el-checkbox>
