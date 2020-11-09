@@ -16,8 +16,11 @@
                     <a slot="title" target="_blank" :href="`/projects/${data.resultProjectId}/datasets`">{{data.resultProject}}</a>
                     <sly-icon slot="icon" :options="{ imageUrl: `${data.resultProjectPreviewUrl}` }"/>
                 </sly-field>
-                <el-progress v-if="data.started === true && data.progress !== 100"
-                             :percentage="data.progress"></el-progress>
+                <div v-if="data.started === true && data.progress !== 100">
+                    <div>{{data.progressCurrent}} / {{data.progressTotal}}</div>
+                    <el-progress :percentage="data.progress"></el-progress>
+                </div>
+
                 <el-button :disabled="data.finished === true" type="primary"
                            @click="command('assign_tags')" v-if="data.started === false">
                     <i class="zmdi zmdi-play" style="margin-right: 5px"></i> Run
@@ -52,7 +55,7 @@
 
                         <el-slider v-if="scope.row.name === 'train'"
                                    v-model="state.percent.train"
-                                   :disabled="state.sliderDisabled"
+                                   :disabled="state.sliderDisabled || data.finished"
                                    show-input :min="1" :max="100"
                                    style="flex:1; max-width: 99%; margin-left: 15px;"
                                    @input="state.count.train = (data.totalImagesCount * state.percent.train / 100).toFixed();
@@ -71,7 +74,10 @@
             <sly-icon slot="icon" :options="{ color: '#ceadff', bgColor: '#f6ebff', rounded: false }">
                 <i class="zmdi zmdi-collection-folder-image"></i>
             </sly-icon>
-            <el-input placeholder="Please input project name" v-model="state.resultProjectName"></el-input>
+            <el-input :disabled="data.finished"
+                      placeholder="Please input project name"
+                      v-model="state.resultProjectName"
+            ></el-input>
         </sly-field>
 
         <sly-field style="margin-top: 15px;"
@@ -82,6 +88,7 @@
                 <i class="zmdi zmdi-share"></i>
             </sly-icon>
             <el-checkbox
+                    :disabled="data.finished === true"
                     v-model="state.shareImagesBetweenSplits"
                     @change="if (state.shareImagesBetweenSplits === true) {
                                 state.count.train = data.totalImagesCount;
@@ -104,7 +111,7 @@
             <sly-icon slot="icon" :options="{ color: '#ff8461', bgColor: '#ffebe3', rounded: false }">
                 <i class="zmdi zmdi-copy"></i>
             </sly-icon>
-            <el-checkbox v-model="state.inplace" disabled="true"> Modify original project</el-checkbox>
+            <el-checkbox v-model="state.inplace" :disabled="true || data.finished"> Modify original project</el-checkbox>
         </sly-field>
 
     </sly-card>

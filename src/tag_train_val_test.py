@@ -70,7 +70,14 @@ def _assign_tag(task_id, api: sly.Api, split, tag_metas, new_project, created_da
             api.annotation.upload_anns(new_image_ids, new_annotations)
 
             progress.iters_done_report(len(batch))
-            api.task.set_field(task_id, "data.progress", int(progress.current * 100 / progress.total))
+            progress_percent = int(progress.current * 100 / progress.total)
+            api.task.set_field(task_id, "data.progress", progress_percent)
+            fields = [
+                {"field": "data.progressCurrent", "payload": progress.current},
+                {"field": "data.progressTotal", "payload": progress.total},
+                {"field": "data.progress", "payload": progress_percent},
+            ]
+            api.task.set_fields(task_id, fields)
 
 
 @my_app.callback("assign_tags")
@@ -122,6 +129,8 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
         {"field": "data.finished", "payload": True}
     ]
     api.task.set_fields(task_id, fields)
+    api.task.set_output_project(task_id, new_project.id, new_project.name)
+    my_app.stop()
 
 
 def main():
@@ -146,8 +155,10 @@ def main():
         "projectName": PROJECT.name,
         "projectPreviewUrl": api.image.preview_url(PROJECT.reference_image_url, 100, 100),
         "progress": 0,
+        "progressCurrent": 0,
+        "progressTotal": TOTAL_IMAGES_COUNT,
         "resultProjectId": None,
-        "resultProject": "1",
+        "resultProject": "",
         "resultProjectPreviewUrl": "",
         "started": False,
         "finished": False,
@@ -183,6 +194,6 @@ def main():
 
 
 #@TODO: inplace
-#@TODO: progress bar
+#@TODO: workspace tasks output
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
