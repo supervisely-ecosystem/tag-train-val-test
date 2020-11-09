@@ -106,7 +106,7 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
     if share_images is True:
         if _cnt_val == 0:
             _created_datasets = {}
-            _assign_tag(api, images_train, [TRAIN_TAG_META, VAL_TAG_META], new_project, _created_datasets, progress)
+            _assign_tag(task_id, api, images_train, [TRAIN_TAG_META, VAL_TAG_META], new_project, _created_datasets, progress)
         else:
             raise RuntimeError("_cnt_val != 0")
     else:
