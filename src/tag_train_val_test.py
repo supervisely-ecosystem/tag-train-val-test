@@ -194,6 +194,5 @@ def main():
 
 
 #@TODO: inplace
-#@TODO: workspace tasks output
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
