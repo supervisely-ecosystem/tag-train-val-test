@@ -21,10 +21,12 @@
 
 ## Overview
 
-Report provides Assigns tags (train/val/test) to images. Training procedure will use these tags to split data.
+Application tags images in project. User can definine percentage of images that will be tagged as "train" or "val" and several additional options. Neural Networks will use these tags to split data into training/validation datasets. 
 
 ## How To Run
 xxx
 
 ## How to Use
-yyy
+<img src="https://media2.giphy.com/media/cnApWE1MfG9522UCv5/giphy.gif"/>
+
+
