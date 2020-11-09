@@ -32,6 +32,9 @@ Application tags images in project. User can definine percentage of images that 
 
 **Step 3**: dfsdfsf
 
+
+**Note**: Running procedure is simialr for almost all apps that are started from context menu. Example steps with screenshots are [here in how-to-run section](https://github.com/supervisely-ecosystem/merge-classes#how-to-run).  
+
 ## How to Use
 <img src="https://media2.giphy.com/media/cnApWE1MfG9522UCv5/giphy.gif"/>
 
