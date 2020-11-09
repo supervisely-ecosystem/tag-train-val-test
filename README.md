@@ -23,6 +23,8 @@
 
 Application tags images in project. User can definine percentage of images that will be tagged as "train" or "val" and several additional options. Neural Networks will use these tags to split data into training/validation datasets. 
 
+<img src="https://i.imgur.com/KA8kXBr.png"/>
+
 ## How To Run
 **Step 1**: dfsdfsf
 
