@@ -10,8 +10,8 @@ PROJECT_ID = int(os.environ['modal.state.slyProjectId'])
 my_app = sly.AppService()
 PROJECT = None
 TOTAL_IMAGES_COUNT = None
-META_ORIGINAL = None
-META_RESULT = None
+META_ORIGINAL: sly.ProjectMeta = None
+META_RESULT: sly.ProjectMeta = None
 
 TRAIN_NAME = 'train'
 TRAIN_COLOR = [0, 255, 0] #RGB
@@ -44,8 +44,8 @@ def sample_images(api, datasets, train_images_count):
 
     return ds_images_train, ds_images_val, len(train_images), len(val_images)
 
-def _assign_tag(api: sly.Api, split, TAG_META, new_project, created_datasets):
-    for (dataset_id, images, tag)  in split:
+def _assign_tag(task_id, api: sly.Api, split, tag_metas, new_project, created_datasets, progress):
+    for dataset_id, images in split.items():
         dataset = api.dataset.get_info_by_id(dataset_id)
         if dataset.name not in created_datasets:
             new_dataset = api.dataset.create(new_project.id, dataset.name)
@@ -61,17 +61,23 @@ def _assign_tag(api: sly.Api, split, TAG_META, new_project, created_datasets):
             for ann_info in ann_infos:
                 ann_json = ann_info.annotation
                 new_ann = sly.Annotation.from_json(ann_json, META_ORIGINAL)
-                new_ann = new_ann.add_tag(sly.Tag(TAG_META))
+                for tag_meta in tag_metas:
+                    new_ann = new_ann.add_tag(sly.Tag(tag_meta))
                 new_annotations.append(new_ann)
 
             new_images = api.image.upload_ids(new_dataset.id, image_names, image_ids)
             new_image_ids = [image_info.id for image_info in new_images]
             api.annotation.upload_anns(new_image_ids, new_annotations)
 
+            progress.iters_done_report(len(batch))
+            api.task.set_field(task_id, "data.progress", int(progress.current * 100 / progress.total))
+
 
 @my_app.callback("assign_tags")
 @sly.timeit
 def assign_tags(api: sly.Api, task_id, context, state, app_logger):
+    api.task.set_field(task_id, "data.started", True)
+
     train_count = state["count"]["train"]
     val_count = state["count"]["val"]
     share_images = state["shareImagesBetweenSplits"]
@@ -83,32 +89,46 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
     datasets = api.dataset.get_list(PROJECT.id)
     images_train, images_val, _cnt_train, _cnt_val = sample_images(api, datasets, train_count)
 
+    res_name = state["resultProjectName"]
+    new_project = api.project.create(WORKSPACE_ID, res_name, sly.ProjectType.IMAGES,
+                                     description="train/val", change_name_if_conflict=True)
+    api.project.update_meta(new_project.id, META_RESULT.to_json())
+
+    progress = sly.Progress("Tagging", TOTAL_IMAGES_COUNT)
+
     if share_images is True:
         if train_count != val_count:
             raise ValueError("Share images option is enabled, but train_count != val_count")
         if _cnt_val == 0:
-            images_val = images_train
+            _created_datasets = {}
+            _assign_tag(api, images_train, [TRAIN_TAG_META, VAL_TAG_META], new_project, _created_datasets, progress)
         else:
             raise RuntimeError("_cnt_val != 0")
     else:
         if train_count + val_count != TOTAL_IMAGES_COUNT:
             raise ValueError("train_count + val_count != TOTAL_IMAGES_COUNT")
 
-    res_name = state["resultProjectName"]
-    new_project = api.project.create(WORKSPACE_ID, res_name, sly.ProjectType.IMAGES,
-                                        description="+ train/val tags", change_name_if_conflict=True)
-    api.project.update_meta(new_project.id, META_RESULT)
+        _created_datasets = {}
+        _assign_tag(task_id, api, images_train, [TRAIN_TAG_META], new_project, _created_datasets, progress)
+        _assign_tag(task_id, api, images_val, [VAL_TAG_META], new_project, _created_datasets, progress)
 
-    _created_datasets = {}
-    _assign_tag(api, images_train, TRAIN_TAG_META, new_project, _created_datasets)
-    _assign_tag(api, images_val, VAL_TAG_META, new_project, _created_datasets)
+    # to get correct "reference_image_url"
+    new_project = api.project.get_info_by_id(new_project.id)
+    fields = [
+        {"field": "data.resultProject", "payload": new_project.name},
+        {"field": "data.resultProjectId", "payload": new_project.id},
+        {"field": "data.resultProjectPreviewUrl",
+         "payload": api.image.preview_url(new_project.reference_image_url, 100, 100)},
+        {"field": "data.finished", "payload": True}
+    ]
+    api.task.set_fields(task_id, fields)
 
 
 def main():
     sly.logger.info("Input params", extra={"context.teamId": TEAM_ID,
                                            "context.workspaceId": WORKSPACE_ID,
                                            "modal.state.slyProjectId": PROJECT_ID})
-    global PROJECT, TOTAL_IMAGES_COUNT, META_ORIGINAL, META_NEW
+    global PROJECT, TOTAL_IMAGES_COUNT, META_ORIGINAL, META_RESULT
 
     api = sly.Api.from_env()
     PROJECT = api.project.get_info_by_id(PROJECT_ID)
@@ -118,7 +138,7 @@ def main():
         raise KeyError("Tag {!r} already exists in project meta".format(TRAIN_NAME))
     if META_ORIGINAL.get_tag_meta(VAL_NAME) is not None:
         raise KeyError("Tag {!r} already exists in project meta".format(VAL_NAME))
-    META_NEW = META_ORIGINAL.add_tag_metas([TRAIN_TAG_META, VAL_TAG_META])
+    META_RESULT = META_ORIGINAL.add_tag_metas([TRAIN_TAG_META, VAL_TAG_META])
 
     TOTAL_IMAGES_COUNT = api.project.get_images_count(PROJECT.id)
     data = {
