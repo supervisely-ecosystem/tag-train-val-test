@@ -31,8 +31,8 @@ def sample_images(api, datasets, train_images_count):
     shuffled_images = all_images.copy()
     random.shuffle(shuffled_images)
 
-    train_images = shuffled_images[:train_images_count]
-    val_images = shuffled_images[train_images_count:]
+    train_images = shuffled_images[:int(train_images_count)]
+    val_images = shuffled_images[int(train_images_count):]
 
     ds_images_train = defaultdict(list)
     for image_info in train_images:
