@@ -1,6 +1,6 @@
 <div align="center" markdown>
 
-<img src="https://i.imgur.com/LG2Ps6Y.png"/>
+<img src="https://i.imgur.com/rjoVeXV.png"/>
 
 # Assign train/val tags to images
 
