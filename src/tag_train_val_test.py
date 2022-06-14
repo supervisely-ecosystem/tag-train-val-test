@@ -1,13 +1,14 @@
 import os
 import random
 from collections import defaultdict
-import supervisely_lib as sly
+import supervisely as sly
+from supervisely.app.v1.app_service import AppService
 
 TEAM_ID = int(os.environ['context.teamId'])
 WORKSPACE_ID = int(os.environ['context.workspaceId'])
 PROJECT_ID = int(os.environ['modal.state.slyProjectId'])
 
-my_app = sly.AppService()
+my_app: AppService = AppService()
 PROJECT = None
 TOTAL_IMAGES_COUNT = None
 META_ORIGINAL: sly.ProjectMeta = None
