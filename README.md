@@ -1,6 +1,6 @@
 <div align="center" markdown>
 
-<img src="https://i.imgur.com/rjoVeXV.png"/>
+<img src="https://user-images.githubusercontent.com/48245050/182362563-ca05f75c-0480-4ba1-8e4f-f53e11238d4f.png"/>
 
 # Assign train/val tags to images
 
