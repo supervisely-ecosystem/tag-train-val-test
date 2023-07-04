@@ -62,8 +62,11 @@ def _assign_tag(task_id, api: sly.Api, split, tag_metas, new_project, created_da
             for ann_info in ann_infos:
                 ann_json = ann_info.annotation
                 new_ann = sly.Annotation.from_json(ann_json, META_ORIGINAL)
+                img_tags = new_ann.img_tags.get_all()
+                img_tags = [tag for tag in img_tags if tag.meta.name not in [TRAIN_NAME, VAL_NAME]]
                 for tag_meta in tag_metas:
-                    new_ann = new_ann.add_tag(sly.Tag(tag_meta))
+                    img_tags.append(sly.Tag(tag_meta))
+                new_ann = new_ann.clone(img_tags=img_tags)
                 new_annotations.append(new_ann)
 
             new_images = api.image.upload_ids(new_dataset.id, image_names, image_ids)
@@ -142,11 +145,28 @@ def main():
     PROJECT = api.project.get_info_by_id(PROJECT_ID)
     meta_json = api.project.get_meta(PROJECT.id)
     META_ORIGINAL = sly.ProjectMeta.from_json(meta_json)
-    if META_ORIGINAL.get_tag_meta(TRAIN_NAME) is not None:
-        raise KeyError("Tag {!r} already exists in project meta".format(TRAIN_NAME))
-    if META_ORIGINAL.get_tag_meta(VAL_NAME) is not None:
-        raise KeyError("Tag {!r} already exists in project meta".format(VAL_NAME))
-    META_RESULT = META_ORIGINAL.add_tag_metas([TRAIN_TAG_META, VAL_TAG_META])
+    original_train_tag_meta = META_ORIGINAL.get_tag_meta(TRAIN_NAME)
+    original_val_tag_meta = META_ORIGINAL.get_tag_meta(VAL_NAME)
+    META_RESULT = META_ORIGINAL.clone()
+    if original_train_tag_meta is not None:
+        sly.logger.warn(f"Tag {TRAIN_NAME} already exists in project meta")
+        if original_train_tag_meta.value_type != sly.TagValueType.NONE:
+            err = f"Existing tag {TRAIN_NAME} in project meta has value_type != NONE. Please check your project tags."
+            sly.logger.error(err)
+            raise ValueError(err)
+        sly.logger.warn(f"Existing {TRAIN_NAME} tags on images will be replaced with new ones")
+    else:
+        META_RESULT = META_RESULT.add_tag_metas([TRAIN_TAG_META])
+
+    if original_val_tag_meta is not None:
+        sly.logger.warn(f"Tag {VAL_NAME} already exists in project meta")
+        if original_val_tag_meta.value_type != sly.TagValueType.NONE:
+            err = f"Existing tag {VAL_NAME} in project meta has value_type != NONE. Please check your project tags."
+            sly.logger.error(err)
+            raise ValueError(err)
+        sly.logger.warn(f"Existing {VAL_NAME} tags on images will be replaced with new ones")
+    else:
+        META_RESULT = META_RESULT.add_tag_metas([VAL_TAG_META])
 
     TOTAL_IMAGES_COUNT = api.project.get_images_count(PROJECT.id)
     data = {
