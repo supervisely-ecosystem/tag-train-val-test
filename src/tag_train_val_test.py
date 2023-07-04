@@ -62,7 +62,7 @@ def _assign_tag(task_id, api: sly.Api, split, tag_metas, new_project, created_da
             for ann_info in ann_infos:
                 ann_json = ann_info.annotation
                 new_ann = sly.Annotation.from_json(ann_json, META_ORIGINAL)
-                img_tags = new_ann.img_tags.get_all()
+                img_tags = new_ann.img_tags.items()
                 img_tags = [tag for tag in img_tags if tag.meta.name not in [TRAIN_NAME, VAL_NAME]]
                 for tag_meta in tag_metas:
                     img_tags.append(sly.Tag(tag_meta))
