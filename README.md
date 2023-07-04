@@ -22,7 +22,7 @@
 
 Application tags images in project. User can choose percentage of images that will be tagged as "train" or "val" and several additional options. Neural Networks will use these tags to split data into training/validation datasets. 
 
-<img src="https://i.imgur.com/KA8kXBr.png"/>
+<img src="media/ov1.png"/>
 
 ## How To Run 
 **Step 1**: Add app to your team from Ecosystem if it is not there.
@@ -37,7 +37,7 @@ Application tags images in project. User can choose percentage of images that wi
 
 **Step 1**: Choose proportion of train/val images by modifying slider. Other parameters are optional with default values.
 
-<img src="https://media2.giphy.com/media/cnApWE1MfG9522UCv5/giphy.gif"/>
+<img src="media/htu1.gif"/>
 
 **Step 2**: Press `Run` button. 
 
