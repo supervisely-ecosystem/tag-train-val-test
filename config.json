@@ -7,7 +7,7 @@
         "data operations"
     ],
     "description": "Assigns tags (train/val) to images. Training apps will use these tags to split data.",
-    "docker_image": "supervisely/data-operations:0.0.1",
+    "docker_image": "supervisely/data-operations:0.0.3",
     "instance_version": "6.4.57",
     "main_script": "src/tag_train_val_test.py",
     "modal_template": "src/modal.html",
