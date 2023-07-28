@@ -1,27 +1,27 @@
 {
-  "name": "Assign train/val tags to images",
-  "type": "app",
-  "categories": [
-    "images",
-    "annotation transformation",
-    "data operations"
-  ],
-  "description": "Assigns tags (train/val) to images. Training apps will use these tags to split data.",
-  "docker_image": "supervisely/base-py-sdk:6.72.70",
-  "instance_version": "6.4.57",
-  "main_script": "src/tag_train_val_test.py",
-  "modal_template": "src/modal.html",
-  "modal_template_state": {},
-  "gui_template": "src/gui.html",
-  "task_location": "workspace_tasks",
-  "isolate": true,
-  "icon": "https://i.imgur.com/f4HAo01.png",
-  "icon_background": "#FFFFFF",
-  "context_menu": {
-    "target": [
-      "images_project"
+    "name": "Assign train/val tags to images",
+    "type": "app",
+    "categories": [
+        "images",
+        "annotation transformation",
+        "data operations"
     ],
-    "context_category": "Training data"
-  },
-  "poster": "https://user-images.githubusercontent.com/48245050/182362563-ca05f75c-0480-4ba1-8e4f-f53e11238d4f.png"
+    "description": "Assigns tags (train/val) to images. Training apps will use these tags to split data.",
+    "docker_image": "supervisely/data-operations:0.0.1",
+    "instance_version": "6.4.57",
+    "main_script": "src/tag_train_val_test.py",
+    "modal_template": "src/modal.html",
+    "modal_template_state": {},
+    "gui_template": "src/gui.html",
+    "task_location": "workspace_tasks",
+    "isolate": true,
+    "icon": "https://i.imgur.com/f4HAo01.png",
+    "icon_background": "#FFFFFF",
+    "context_menu": {
+        "target": [
+            "images_project"
+        ],
+        "context_category": "Training data"
+    },
+    "poster": "https://user-images.githubusercontent.com/48245050/182362563-ca05f75c-0480-4ba1-8e4f-f53e11238d4f.png"
 }
