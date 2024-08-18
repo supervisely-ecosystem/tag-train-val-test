@@ -3,6 +3,7 @@ import random
 from collections import defaultdict
 import supervisely as sly
 from supervisely.app.v1.app_service import AppService
+import workflow as w
 
 TEAM_ID = int(os.environ['context.teamId'])
 WORKSPACE_ID = int(os.environ['context.workspaceId'])
@@ -132,6 +133,7 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
     ]
     api.task.set_fields(task_id, fields)
     api.task.set_output_project(task_id, new_project.id, new_project.name)
+    w.workflow_output(api, new_project.id)
     my_app.stop()
 
 
@@ -143,6 +145,7 @@ def main():
 
     api = sly.Api.from_env()
     PROJECT = api.project.get_info_by_id(PROJECT_ID)
+    w.workflow_input(api, PROJECT.id)
     meta_json = api.project.get_meta(PROJECT.id)
     META_ORIGINAL = sly.ProjectMeta.from_json(meta_json)
     original_train_tag_meta = META_ORIGINAL.get_tag_meta(TRAIN_NAME)
