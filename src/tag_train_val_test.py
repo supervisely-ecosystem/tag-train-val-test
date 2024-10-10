@@ -4,6 +4,7 @@ from collections import defaultdict
 import supervisely as sly
 from supervisely.app.v1.app_service import AppService
 import workflow as w
+from datetime import datetime
 
 TEAM_ID = int(os.environ['context.teamId'])
 WORKSPACE_ID = int(os.environ['context.workspaceId'])
@@ -84,6 +85,15 @@ def _assign_tag(task_id, api: sly.Api, split, tag_metas, new_project, created_da
             ]
             api.task.set_fields(task_id, fields)
 
+def validate_project_name(name):
+    if not name or name.strip() == "":
+        return f"{PROJECT.name}_tagged"
+    
+    special_chars = ['/', '\\', '|']
+    for char in special_chars:
+        name = name.replace(char, '')
+    
+    return name
 
 @my_app.callback("assign_tags")
 @sly.timeit
@@ -101,7 +111,7 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
     datasets = api.dataset.get_list(PROJECT.id)
     images_train, images_val, _cnt_train, _cnt_val = sample_images(api, datasets, train_count)
 
-    res_name = state["resultProjectName"]
+    res_name = validate_project_name(state["resultProjectName"])
     new_project = api.project.create(WORKSPACE_ID, res_name, sly.ProjectType.IMAGES,
                                      description="train/val", change_name_if_conflict=True)
     api.project.update_meta(new_project.id, META_RESULT.to_json())
