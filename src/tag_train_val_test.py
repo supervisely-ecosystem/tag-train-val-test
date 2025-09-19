@@ -303,7 +303,7 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
     res_name = validate_project_name(state["resultProjectName"])
 
     progress = sly.Progress("Cloning project...", TOTAL_IMAGES_COUNT)
-    new_project = copy_project(task_id, api, res_name, WORKSPACE_ID, PROJECT.id, progress)
+    new_project = copy_project(task_id, api, res_name, WORKSPACE_ID, PROJECT.id, progress=progress)
     
     datasets = api.dataset.get_list(new_project.id, recursive=True)
     images_train, images_val, _cnt_train, _cnt_val = sample_images(api, datasets, train_count)
