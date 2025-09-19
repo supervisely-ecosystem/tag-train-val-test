@@ -103,6 +103,7 @@ def copy_project(
             workspace_id,
             project_name,
             type=sly.ProjectType.IMAGES,
+            description="train/val",
             change_name_if_conflict=True,
         )
         api.project.update_meta(created_project.id, META_RESULT)
