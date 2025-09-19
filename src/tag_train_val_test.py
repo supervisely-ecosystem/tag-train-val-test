@@ -70,16 +70,20 @@ def _find_parents_in_tree(
 
 
 def copy_project(
+    task_id: int,
     api: sly.Api,
     project_name: str,
     workspace_id: int,
     project_id: int,
     dataset_ids: List[int] = [],
     with_annotations: bool = True,
+    progress: sly.Progress = None,
 ):
     """
     Copy a project
 
+    :param task_id: ID of the task
+    :type task_id: int
     :param api: Supervisely API
     :type api: Api
     :param project_name: Name of the new project
@@ -92,7 +96,7 @@ def copy_project(
     :type dataset_ids: List[int]
     :param with_annotations: Whether to copy annotations
     :type with_annotations: bool
-    :param progress: Progress callback
+    :param progress: Progress object to report progress
     :type progress: Progress
     :return: Created project
     :rtype: ProjectInfo
@@ -179,7 +183,24 @@ def copy_project(
             dst_dataset_id=dst_ds.id,
             with_annotations=with_annotations,
         )
+        if progress is not None:
+            progress.iters_done_report(len(input_img_infos))
+            progress_percent = int(progress.current * 100 / progress.total)
+            api.task.set_field(task_id, "data.progress", progress_percent)
+            fields = [
+                {"field": "data.progressCurrent", "payload": progress.current},
+                {"field": "data.progressTotal", "payload": progress.total},
+                {"field": "data.progress", "payload": progress_percent},
+            ]
+            api.task.set_fields(task_id, fields)
 
+    fields = [
+        {"field": "data.message", "payload": "Cloning project..."},
+        {"field": "data.progress", "payload": 0},
+        {"field": "data.progressCurrent", "payload": 0},
+        {"field": "data.progressTotal", "payload": TOTAL_IMAGES_COUNT},
+    ]
+    api.task.set_fields(task_id, fields)
     created_project = _create_project()
     src_datasets_tree = api.dataset.get_tree(project_id)
 
@@ -280,12 +301,20 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
         raise NotImplementedError("Inplace operation will be implemented in the future...")
 
     res_name = validate_project_name(state["resultProjectName"])
-    new_project = copy_project(api, res_name, WORKSPACE_ID, PROJECT.id)
+
+    progress = sly.Progress("Cloning project...", TOTAL_IMAGES_COUNT)
+    new_project = copy_project(api, res_name, WORKSPACE_ID, PROJECT.id, progress)
     
     datasets = api.dataset.get_list(new_project.id, recursive=True)
     images_train, images_val, _cnt_train, _cnt_val = sample_images(api, datasets, train_count)
 
     progress = sly.Progress("Tagging", TOTAL_IMAGES_COUNT)
+    fields = [
+        {"field": "data.message", "payload": "Tagging..."},
+        {"field": "data.progress", "payload": 0},
+        {"field": "data.progressCurrent", "payload": 0},
+        {"field": "data.progressTotal", "payload": TOTAL_IMAGES_COUNT},
+    ]
 
     if share_images is True:
         if _cnt_val == 0:
@@ -360,6 +389,7 @@ def main():
         "resultProject": "",
         "resultProjectPreviewUrl": "",
         "started": False,
+        "message": "",
         "finished": False,
         "totalImagesCount": TOTAL_IMAGES_COUNT,
         "table": [
