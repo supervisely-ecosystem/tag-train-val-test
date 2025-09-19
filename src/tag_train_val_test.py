@@ -108,7 +108,7 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
     if inplace is True:
         raise NotImplementedError("Inplace operation will be implemented in the future...")
 
-    datasets = api.dataset.get_list(PROJECT.id)
+    datasets = api.dataset.get_list(PROJECT.id, recursive=True)
     images_train, images_val, _cnt_train, _cnt_val = sample_images(api, datasets, train_count)
 
     res_name = validate_project_name(state["resultProjectName"])
