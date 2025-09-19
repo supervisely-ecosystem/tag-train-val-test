@@ -315,6 +315,7 @@ def assign_tags(api: sly.Api, task_id, context, state, app_logger):
         {"field": "data.progressCurrent", "payload": 0},
         {"field": "data.progressTotal", "payload": TOTAL_IMAGES_COUNT},
     ]
+    api.task.set_fields(task_id, fields)
 
     if share_images is True:
         if _cnt_val == 0:
