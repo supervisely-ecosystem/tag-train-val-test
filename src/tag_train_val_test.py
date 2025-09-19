@@ -105,8 +105,7 @@ def copy_project(
             type=sly.ProjectType.IMAGES,
             change_name_if_conflict=True,
         )
-        if with_annotations:
-            api.project.merge_metas(src_project_id=project_id, dst_project_id=created_project.id)
+        api.project.update_meta(created_project.id, META_RESULT)
         return created_project
 
     def _copy_full_project(
