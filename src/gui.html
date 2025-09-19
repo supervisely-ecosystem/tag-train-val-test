@@ -11,13 +11,13 @@
         </el-col>
         <el-col :span="16" style="flex: 1">
             <sly-card title="Output" style="height: 100%">
-                <sly-field v-if="data.progress === 100" title=""
+                <sly-field v-if="data.finished === true" title=""
                            description="New project has been successfully created">
                     <a slot="title" target="_blank" :href="`/projects/${data.resultProjectId}/datasets`">{{data.resultProject}}</a>
                     <sly-icon slot="icon" :options="{ imageUrl: `${data.resultProjectPreviewUrl}` }"/>
                 </sly-field>
                 <div v-if="data.started === true && data.progress !== 100">
-                    <div>{{data.progressCurrent}} / {{data.progressTotal}}</div>
+                    <div>{{data.message}} {{data.progressCurrent}} / {{data.progressTotal}}</div>
                     <el-progress :percentage="data.progress"></el-progress>
                 </div>
 
