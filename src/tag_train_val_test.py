@@ -182,6 +182,7 @@ def copy_project(
             src_image_infos=input_img_infos,
             dst_dataset_id=dst_ds.id,
             with_annotations=with_annotations,
+            save_source_date=False
         )
         if progress is not None:
             progress.iters_done_report(len(input_img_infos))
