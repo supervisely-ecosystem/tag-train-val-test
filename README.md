@@ -20,28 +20,36 @@
 
 ## Overview
 
-Application tags images in project. User can choose percentage of images that will be tagged as "train" or "val" and several additional options. Neural Networks will use these tags to split data into training/validation datasets. 
+Application tags images in project. User can choose percentage of images that will be tagged as "train" or "val" and several additional options. Neural Networks will use these tags to split data into training/validation datasets.
+
+The original project is not changed: the app creates a new project in the same workspace with the same
+datasets (including nested ones), images, annotations and object bindings, and puts exactly one of the tags
+`train` / `val` on every image (both tags with "Train == Validation"). Images are picked at random across the
+whole project. Existing `train` / `val` tags on images are replaced; existing `train` / `val` tags in the project
+meta are reused and must have no value (the app stops with an error otherwise).
 
 <img src="https://i.imgur.com/KA8kXBr.png"/>
 
-## How To Run 
+## How To Run
+
 **Step 1**: Add app to your team from Ecosystem if it is not there.
 
 **Step 2**: Run from context menu of project: `thee dots button` -> `Run App` -> `Training data` -> `Assign train\val tags to images`.
 
-**Step 3**: You will be redirected to `Current Workspace`->`Tasks` page. Wait until app is started and press `Open` button. 
+**Step 3**: You will be redirected to `Current Workspace`->`Tasks` page. Wait until app is started and press `Open` button.
 
-**Note**: Running procedure is simialr for almost all apps that are started from context menu. Example steps with screenshots are [here in how-to-run section](https://github.com/supervisely-ecosystem/merge-classes#how-to-run).  
+**Note**: Running procedure is similar for almost all apps that are started from context menu. Example steps with screenshots are [here in how-to-run section](https://github.com/supervisely-ecosystem/merge-classes#how-to-run).
 
 ## How to Use
 
-**Step 1**: Choose proportion of train/val images by modifying slider. Other parameters are optional with default values.
+**Step 1**: Choose proportion of train/val images with the slider (1-100 %, default 80 %): the number of train
+images is `floor(total * percent / 100)`, the rest are val. Optional settings:
+- **Result project name** (default `<project name> (with train-val tags)`); characters `/ \ |` are removed, and if the
+  name is taken a numeric suffix is added (e.g. `_001`).
+- **Train == Validation** (for NN debugging on tiny datasets): every image gets both `train` and `val`.
 
-<img src="https://media2.giphy.com/media/cnApWE1MfG9522UCv5/giphy.gif"/>
+**Step 2**: Press `Run` button.
 
-**Step 2**: Press `Run` button. 
-
-**Step 3**: Whait until process is finished. Link to resulting project will be created both on application page (`Output` section) and in workspace tasks table.
+**Step 3**: Wait until process is finished. Link to resulting project will be created both on application page (`Output` section) and in workspace tasks table.
 
 **Step 4**: App shuts down automatically on finish.
-
